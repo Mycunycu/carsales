@@ -1,7 +1,12 @@
 package main
 
-import "fmt"
+import (
+	"carsales/config"
+	"github.com/sirupsen/logrus"
+)
 
 func main() {
-	fmt.Println("Hello world!")
+	config.Init()
+	cfg := config.GetConfig()
+	logrus.Printf("%s\n", cfg.Port)
 }
