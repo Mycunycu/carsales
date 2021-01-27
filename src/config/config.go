@@ -1,22 +1,22 @@
 package config
 
 import (
+	"carsales/models"
+
+	"os"
+
 	"github.com/joho/godotenv"
 	"github.com/sirupsen/logrus"
-	"os"
 )
 
-type Config struct {
-	Port string
-}
-
+// Init ...
 func Init() {
 	if err := godotenv.Load(); err != nil {
 		logrus.Fatal("No such file .env")
 	}
 }
 
-func getEnv(envName string, defaultVal string) string{
+func getEnv(envName string, defaultVal string) string {
 	if env, exist := os.LookupEnv(envName); exist {
 		return env
 	}
@@ -24,8 +24,15 @@ func getEnv(envName string, defaultVal string) string{
 	return defaultVal
 }
 
-func GetConfig() *Config {
-	return &Config{
-		Port: getEnv("PORT", "8000"),
+// GetConfig ...
+func GetConfig() *models.Config {
+	return &models.Config{
+		Port:       getEnv("PORT", "8000"),
+		DBHost:     getEnv("DBHOST", ""),
+		DBPort:     getEnv("DBPORT", ""),
+		DBUserName: getEnv("DBUSERNAME", ""),
+		DBPassword: getEnv("DBPASSWORD", ""),
+		DBName:     getEnv("DBNAME", ""),
+		SSLMode:    getEnv("SSLMODE", ""),
 	}
 }
