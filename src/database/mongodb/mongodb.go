@@ -14,23 +14,19 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
+// Store ...
+type Store struct {
+	Db     *mongo.Database
+	Client *mongo.Client
+}
+
 // Connect - ...
-func Connect(dbName string, connStr string) (*mongo.Database, *mongo.Client) {
-	var (
-		connectOnce sync.Once
-		db          *mongo.Database
-		client      *mongo.Client
-	)
+func (s *Store) Connect(dbName string, connStr string) {
+	var connectOnce sync.Once
 
 	connectOnce.Do(func() {
-		db, client = connectToMongo(dbName, connStr)
+		s.Db, s.Client = connectToMongo(dbName, connStr)
 	})
-
-	if db == nil || client == nil {
-		logrus.Fatal("Failed connect to database")
-	}
-
-	return db, client
 }
 
 func connectToMongo(dbName string, connStr string) (*mongo.Database, *mongo.Client) {
