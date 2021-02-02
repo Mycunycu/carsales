@@ -25,6 +25,4 @@ func Run(configPath string) {
 	srv := new(httpserver.Server)
 	router := new(routes.Routes)
 	srv.Run(cfg.HTTP.Port, router.Init())
-
-	logrus.Println("Server is running on Port: ", cfg.HTTP.Port)
 }

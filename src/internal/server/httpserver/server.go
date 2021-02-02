@@ -22,8 +22,12 @@ func (s *Server) Run(port string, handler http.Handler) {
 		WriteTimeout:   10 * time.Second,
 	}
 
-	err := s.httpServer.ListenAndServe()
-	if err != nil {
-		logrus.Fatal(err)
-	}
+	go func() {
+		err := s.httpServer.ListenAndServe()
+		if err != nil {
+			logrus.Fatal(err)
+		}
+	}()
+
+	logrus.Println("Server is running on Port: ", port)
 }
