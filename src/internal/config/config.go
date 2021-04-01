@@ -1,60 +1,52 @@
 package config
 
 import (
-	"strings"
+	"os"
+	"sync"
 
-	"github.com/spf13/viper"
+	"github.com/joho/godotenv"
+	"github.com/sirupsen/logrus"
 )
 
-type (
-	//Config ...
-	Config struct {
-		HTTP  HTTPConfig
-		Mongo MongoConfig
-	}
-	// HTTPConfig ...
-	HTTPConfig struct {
-		Host string
-		Port string
-	}
-	// MongoConfig ...
-	MongoConfig struct {
-		ConnString string
-		DbName     string
-	}
-)
-
-// Init ...
-func Init(path string) (*Config, error) {
-	if err := readConfig(path); err != nil {
-		return nil, err
-	}
-
-	var cfg Config
-	if err := unmarshal(&cfg); err != nil {
-		return nil, err
-	}
-
-	return &cfg, nil
+type Config struct {
+	Port         string
+	Env          string
+	PgConnStr    string
+	MongoConnStr string
+	DbName       string
 }
 
-func readConfig(path string) error {
-	pathParts := strings.Split(path, "/")
+var config Config
 
-	viper.AddConfigPath(pathParts[0]) // folder
-	viper.SetConfigName(pathParts[1]) // file name
+func Init() (*Config, error) {
+	var once sync.Once
 
-	return viper.ReadInConfig()
+	once.Do(func() {
+		if err := godotenv.Load(); err != nil {
+			logrus.Fatal("Error loading .env file")
+		}
+
+		env := getStringEnv("ENV", "")
+		if env == "" {
+			env = "dev"
+		}
+
+		config.Env = env
+		config.Port = getStringEnv("PORT", "")
+		config.PgConnStr = getStringEnv("PG_CONNECTION", "")
+		config.MongoConnStr = getStringEnv("MONGO_CONNECTION", "")
+		config.DbName = getStringEnv("DB_NAME", "")
+	})
+
+	return &config, nil
 }
 
-func unmarshal(cfg *Config) error {
-	if err := viper.UnmarshalKey("http", &cfg.HTTP); err != nil {
-		return err
+func getStringEnv(key string, defValue string) string {
+	value := os.Getenv(key)
+
+	if value == "" {
+		return defValue
 	}
 
-	if err := viper.UnmarshalKey("mongo", &cfg.Mongo); err != nil {
-		return err
-	}
-
-	return nil
+	return value
 }

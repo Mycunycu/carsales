@@ -7,22 +7,18 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// Routes ...
-type Routes struct{}
-
-// Init ...
-func (r *Routes) Init() *gin.Engine {
-	router := gin.Default()
+func Get() *gin.Engine {
+	r := gin.Default()
 
 	corsMiddleware := new(middleware.Cors).Init()
-	router.Use(corsMiddleware)
+	r.Use(corsMiddleware)
 
 	authController := new(controller.AuthController)
-	auth := router.Group("/auth")
+	auth := r.Group("api/auth")
 	{
 		auth.POST("/signUp", authController.SignUp)
 		auth.POST("/signIn", authController.SignIn)
 	}
 
-	return router
+	return r
 }
