@@ -1,22 +1,18 @@
 package controller
 
 import (
-	"carsales/pkg/logger"
-
 	"github.com/gin-gonic/gin"
-	"go.uber.org/zap"
+	"github.com/sirupsen/logrus"
 )
 
 type AuthController struct{}
 
 // SignIn - login
 func (auth *AuthController) SignIn(ctx *gin.Context) {
-	logger := logger.Get()
-	defer logger.Sync()
 
 	_, err := ctx.Writer.Write([]byte("SignIn"))
 	if err != nil {
-		logger.Error("Erorr", zap.NamedError("Err", err))
+		logrus.Println(err)
 	}
 }
 
