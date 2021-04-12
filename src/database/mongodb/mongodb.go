@@ -3,7 +3,6 @@ package mongodb
 import (
 	"carsales/internal/config"
 	"context"
-	"fmt"
 	"sync"
 	"time"
 
@@ -58,7 +57,6 @@ func connectToMongo(connStr string, dbName string) (*mongo.Database, error) {
 	}
 
 	var db = client.Database(dbName)
-	fmt.Printf("Connected to DbName: %s\n", dbName)
 
 	return db, nil
 }

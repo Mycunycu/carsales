@@ -1,11 +1,11 @@
 package config
 
 import (
+	"log"
 	"os"
 	"sync"
 
 	"github.com/joho/godotenv"
-	"github.com/sirupsen/logrus"
 )
 
 type Config struct {
@@ -18,35 +18,40 @@ type Config struct {
 
 var config Config
 
-func Init() (*Config, error) {
+func GetConfig() *Config {
+	config.Env = getStringEnv("ENV", "dev")
+	config.Port = getStringEnv("PORT", "")
+	config.PgConnStr = getStringEnv("PG_CONNECTION", "")
+	config.MongoConnStr = getStringEnv("MONGO_CONNECTION", "")
+	config.DbName = getStringEnv("DB_NAME", "")
+
+	return &config
+}
+
+func Init() *Config {
 	var once sync.Once
 
 	once.Do(func() {
 		if err := godotenv.Load(); err != nil {
-			logrus.Fatal("Error loading .env file")
+			log.Fatal("Error loading .env file")
 		}
-
-		env := getStringEnv("ENV", "")
-		if env == "" {
-			env = "dev"
-		}
-
-		config.Env = env
-		config.Port = getStringEnv("PORT", "")
-		config.PgConnStr = getStringEnv("PG_CONNECTION", "")
-		config.MongoConnStr = getStringEnv("MONGO_CONNECTION", "")
-		config.DbName = getStringEnv("DB_NAME", "")
 	})
 
-	return &config, nil
+	config := GetConfig()
+
+	return config
 }
 
 func getStringEnv(key string, defValue string) string {
-	value := os.Getenv(key)
+	value, isExist := os.LookupEnv(key)
 
-	if value == "" {
-		return defValue
+	if isExist {
+		return value
 	}
 
-	return value
+	if defValue == "" {
+		log.Fatalf("Environment variable %s not defined", key)
+	}
+
+	return defValue
 }
