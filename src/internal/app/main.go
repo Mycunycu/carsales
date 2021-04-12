@@ -6,37 +6,39 @@ import (
 	"carsales/internal/config"
 	"carsales/internal/server/httpserver"
 	"carsales/internal/server/routes"
+	"carsales/pkg/logger"
+	"log"
 
-	"github.com/sirupsen/logrus"
+	"go.uber.org/zap"
 )
 
 func main() {
 	if err := run(); err != nil {
-		logrus.Fatal(err)
+		log.Fatal("Error in initialize application: ", err)
 	}
 }
 
 func run() error {
 	// Initialise and get config
-	cfg, err := config.Init()
-	if err != nil {
-		return err
-	}
-	logrus.Println("Config: ", cfg)
+	cfg := config.Init()
+	logger := logger.Get()
+	defer logger.Sync()
+
+	logger.Info("Config initialized", zap.Any("Config", cfg))
 
 	// connect and get postgres db
-	pdb, err := postgres.Connect(cfg)
+	pgStore, err := postgres.Connect(cfg)
 	if err != nil {
 		return err
 	}
-	logrus.Println(pdb)
+	logger.Info("Postgres connected", zap.Any("PostgesStore", pgStore))
 
 	// connect and get mongodb
-	mdb, err := mongodb.Connect(cfg)
+	mongoStore, err := mongodb.Connect(cfg)
 	if err != nil {
 		return err
 	}
-	logrus.Println(mdb)
+	logger.Info("Postgres connected", zap.Any("MongoStore", mongoStore))
 
 	// Server run
 	httpserver.Run(cfg.Port, routes.Get())

@@ -1,14 +1,17 @@
 package httpserver
 
 import (
+	"carsales/pkg/logger"
 	"net/http"
 	"time"
 
-	"github.com/sirupsen/logrus"
+	"go.uber.org/zap"
 )
 
 // Run - ...
 func Run(port string, handler http.Handler) {
+	logger := logger.Get()
+	defer logger.Sync()
 	httpServer := &http.Server{
 		Addr:           ":" + port,
 		Handler:        handler,
@@ -17,9 +20,9 @@ func Run(port string, handler http.Handler) {
 		WriteTimeout:   10 * time.Second,
 	}
 
-	logrus.Println("Server is running on Port: ", port)
+	logger.Info("Server is running", zap.String("Port", port))
 	err := httpServer.ListenAndServe()
 	if err != nil {
-		logrus.Fatal(err)
+		logger.Fatal("Serve Error", zap.NamedError("Error", err))
 	}
 }
