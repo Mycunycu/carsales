@@ -8,7 +8,7 @@ import (
 
 func Get() *zap.Logger {
 	var logger *zap.Logger
-	cfg := config.GetConfig()
+	cfg := config.Get()
 
 	if cfg.Env == "prod" {
 		logger, _ = zap.NewProduction()

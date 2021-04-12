@@ -18,7 +18,7 @@ type Config struct {
 
 var config Config
 
-func GetConfig() *Config {
+func Get() *Config {
 	config.Env = getStringEnv("ENV", "dev")
 	config.Port = getStringEnv("PORT", "")
 	config.PgConnStr = getStringEnv("PG_CONNECTION", "")
@@ -37,7 +37,7 @@ func Init() *Config {
 		}
 	})
 
-	config := GetConfig()
+	config := Get()
 
 	return config
 }
