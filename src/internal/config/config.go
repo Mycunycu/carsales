@@ -8,6 +8,11 @@ import (
 	"github.com/joho/godotenv"
 )
 
+const (
+	DEV_ENV  = "dev"
+	PROD_ENV = "prod"
+)
+
 type Config struct {
 	Port         string
 	Env          string
@@ -16,33 +21,31 @@ type Config struct {
 	DbName       string
 }
 
-var config Config
+var cfg *Config
 
 func Get() *Config {
-	config.Env = getStringEnv("ENV", "dev")
-	config.Port = getStringEnv("PORT", "")
-	config.PgConnStr = getStringEnv("PG_CONNECTION", "")
-	config.MongoConnStr = getStringEnv("MONGO_CONNECTION", "")
-	config.DbName = getStringEnv("DB_NAME", "")
-
-	return &config
+	return cfg
 }
 
-func Init() *Config {
+func Init() {
 	var once sync.Once
 
 	once.Do(func() {
 		if err := godotenv.Load(); err != nil {
 			log.Fatal("Error loading .env file")
 		}
+
+		cfg = &Config{}
+
+		cfg.Env = getVar("ENV", DEV_ENV)
+		cfg.Port = getVar("PORT", "")
+		cfg.PgConnStr = getVar("PG_CONNECTION", "")
+		cfg.MongoConnStr = getVar("MONGO_CONNECTION", "")
+		cfg.DbName = getVar("DB_NAME", "")
 	})
-
-	config := Get()
-
-	return config
 }
 
-func getStringEnv(key string, defValue string) string {
+func getVar(key string, defValue string) string {
 	value, isExist := os.LookupEnv(key)
 
 	if isExist {
