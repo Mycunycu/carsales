@@ -27,7 +27,7 @@ func Get() *Config {
 	return cfg
 }
 
-func Init() {
+func init() {
 	var once sync.Once
 
 	once.Do(func() {

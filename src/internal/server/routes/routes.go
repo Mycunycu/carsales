@@ -2,7 +2,7 @@ package routes
 
 import (
 	"carsales/internal/controller"
-	"carsales/pkg/middleware"
+	"carsales/pkg/cors"
 
 	"github.com/gin-gonic/gin"
 )
@@ -10,8 +10,8 @@ import (
 func Get() *gin.Engine {
 	r := gin.Default()
 
-	corsMiddleware := new(middleware.Cors).Init()
-	r.Use(corsMiddleware)
+	corsCfg := cors.Get()
+	r.Use(corsCfg)
 
 	authController := new(controller.AuthController)
 	auth := r.Group("api/auth")

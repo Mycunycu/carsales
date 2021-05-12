@@ -1,4 +1,4 @@
-package middleware
+package cors
 
 import (
 	"time"
@@ -7,10 +7,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type Cors struct{}
+var corsCfg cors.Config
 
-func (c *Cors) Init() gin.HandlerFunc {
-	cfg := cors.Config{
+func init() {
+	corsCfg = cors.Config{
 		AllowOrigins:     []string{"http://localhost:8080"},
 		AllowMethods:     []string{"POST", "GET", "PUT", "DELETE", "OPTIONS"},
 		AllowHeaders:     []string{"Original", "Content-Type", "Accept"},
@@ -21,6 +21,8 @@ func (c *Cors) Init() gin.HandlerFunc {
 		},
 		MaxAge: 12 * time.Hour,
 	}
+}
 
-	return cors.New(cfg)
+func Get() gin.HandlerFunc {
+	return cors.New(corsCfg)
 }

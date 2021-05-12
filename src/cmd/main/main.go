@@ -19,7 +19,6 @@ func main() {
 }
 
 func run() error {
-	config.Init()
 	cfg := config.Get()
 	logger := logger.Get()
 	defer logger.Sync()

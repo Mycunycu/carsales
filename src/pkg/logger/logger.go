@@ -6,17 +6,21 @@ import (
 	"go.uber.org/zap"
 )
 
-func Get() *zap.Logger {
-	var logger *zap.Logger
+type Logger struct {
+	*zap.Logger
+}
+
+func Get() Logger {
+	var zapLogger *zap.Logger
 	cfg := config.Get()
 
-	if cfg.Env == "prod" {
-		logger, _ = zap.NewProduction()
-		logger.Info("Will used PROD preset logger")
+	if cfg.Env == config.PROD_ENV {
+		zapLogger, _ = zap.NewProduction()
+		zapLogger.Info("Will used PROD preset logger")
 	}
 
-	logger, _ = zap.NewDevelopment()
-	logger.Info("Will used DEV preset logger")
+	zapLogger, _ = zap.NewDevelopment()
+	zapLogger.Info("Will used DEV preset logger")
 
-	return logger
+	return Logger{zapLogger}
 }
