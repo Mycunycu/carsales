@@ -19,7 +19,7 @@ type MongoStore struct {
 }
 
 // Connect - ...
-func Connect(cfg *config.Config) (*MongoStore, error) {
+func Connect(cfg config.Config) (*MongoStore, error) {
 	var once sync.Once
 	var db *mongo.Database
 	var err error

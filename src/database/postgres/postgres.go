@@ -11,7 +11,7 @@ type PgStore struct {
 	*sql.DB
 }
 
-func Connect(cfg *config.Config) (*PgStore, error) {
+func Connect(cfg config.Config) (*PgStore, error) {
 	db, err := sql.Open("postgres", cfg.PgConnStr)
 	if err != nil {
 		return nil, err

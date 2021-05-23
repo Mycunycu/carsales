@@ -1,24 +1,30 @@
 package config
 
 import (
-	"log"
-	"os"
+	"carsales/pkg/logger"
 	"sync"
 
-	"github.com/joho/godotenv"
+	"github.com/ilyakaznacheev/cleanenv"
 )
 
 const (
-	DEV_ENV  = "dev"
-	PROD_ENV = "prod"
+	DEVELOPMENT = "development"
+	PRODUCTION  = "production"
 )
 
 type Config struct {
-	Port         string
-	Env          string
-	PgConnStr    string
-	MongoConnStr string
-	DbName       string
+	Environment string `yaml:"environment" env-default:"development"`
+	Server      struct {
+		Type   string `yaml:"type" env-default:"port"`
+		Domain string `yaml:"domain" env-default:"localhost"`
+		Port   string `yaml:"port" env-default:"8080"`
+	}
+	JWT struct {
+		Secret string `yaml:"secret" env-required:"true"`
+	}
+	UserService struct {
+		URL string `yaml:"url" env-required:"true"`
+	} `yaml:"user_service" env-required:"true"`
 }
 
 var cfg *Config
@@ -31,30 +37,17 @@ func init() {
 	var once sync.Once
 
 	once.Do(func() {
-		if err := godotenv.Load(); err != nil {
-			log.Fatal("Error loading .env file")
-		}
+		logger := logger.Get()
+		defer logger.Sync()
+
+		logger.Info("Read application config")
 
 		cfg = &Config{}
 
-		cfg.Env = getVar("ENV", DEV_ENV)
-		cfg.Port = getVar("PORT", "")
-		cfg.PgConnStr = getVar("PG_CONNECTION", "")
-		cfg.MongoConnStr = getVar("MONGO_CONNECTION", "")
-		cfg.DbName = getVar("DB_NAME", "")
+		if err := cleanenv.ReadConfig("config.yml", cfg); err != nil {
+			help, _ := cleanenv.GetDescription(cfg, nil)
+			logger.Info(help)
+			logger.Fatal(err.Error())
+		}
 	})
-}
-
-func getVar(key string, defValue string) string {
-	value, isExist := os.LookupEnv(key)
-
-	if isExist {
-		return value
-	}
-
-	if defValue == "" {
-		log.Fatalf("Environment variable %s not defined", key)
-	}
-
-	return defValue
 }
