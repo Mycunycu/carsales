@@ -1,3 +1,0 @@
-2021-05-13T19:3523Z	INFO	main/main.go:30	Connecting to Postgres successfully
-2021-05-13T19:3525Z	INFO	main/main.go:37	Connecting to MongoDB successfully
-2021-05-13T19:3525Z	INFO	httpserver/server.go:23	Server is running	{"Port": "8080"}
