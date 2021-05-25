@@ -4,7 +4,7 @@ import (
 	"carsales/internal/config"
 	"carsales/internal/server/httpserver"
 	"carsales/internal/server/routes"
-	"carsales/pkg/logger"
+	"carsales/logger"
 	"log"
 )
 
