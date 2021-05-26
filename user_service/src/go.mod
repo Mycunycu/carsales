@@ -1,4 +1,4 @@
-module carsales_user
+module carsalesuser
 
 go 1.16
 

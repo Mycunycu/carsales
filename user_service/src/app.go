@@ -1,8 +1,8 @@
 package main
 
 import (
-	"carsales_user/internal/config"
-	"carsales_user/logger"
+	"carsalesuser/internal/config"
+	"carsalesuser/logger"
 	"log"
 )
 

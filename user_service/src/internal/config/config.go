@@ -1,7 +1,7 @@
 package config
 
 import (
-	"carsales_user/logger"
+	"carsalesuser/logger"
 	"sync"
 
 	"github.com/ilyakaznacheev/cleanenv"

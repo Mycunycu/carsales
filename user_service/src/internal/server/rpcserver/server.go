@@ -1,7 +1,7 @@
 package httpserver
 
 import (
-	"carsales_user/logger"
+	"carsalesuser/logger"
 	"net/http"
 	"time"
 
