@@ -22,6 +22,6 @@ func run() error {
 	cfg := config.Get()
 	logger.Info("Config initialized")
 
-	httpserver.Run(cfg.Server.Port, routes.Get())
+	httpserver.Run(cfg.HTTPServer.Port, routes.Get())
 	return nil
 }
