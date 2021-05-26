@@ -1,7 +1,7 @@
 package controller
 
 import (
-	"carsales/pkg/logger"
+	"carsales/logger"
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"

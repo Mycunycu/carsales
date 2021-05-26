@@ -1,7 +1,7 @@
 package config
 
 import (
-	"carsales/pkg/logger"
+	"carsales/logger"
 	"sync"
 
 	"github.com/ilyakaznacheev/cleanenv"
@@ -14,16 +14,16 @@ const (
 
 type Config struct {
 	Environment string `yaml:"environment" env-default:"development"`
-	Server      struct {
+	HTTPServer  struct {
 		Type   string `yaml:"type" env-default:"port"`
 		Domain string `yaml:"domain" env-default:"localhost"`
 		Port   string `yaml:"port" env-default:"8080"`
-	}
+	} `yaml:"httpserver"`
 	JWT struct {
 		Secret string `yaml:"secret" env-required:"true"`
 	}
 	UserService struct {
-		URL string `yaml:"url" env-required:"true"`
+		Port string `yaml:"port" env-required:"true"`
 	} `yaml:"user_service" env-required:"true"`
 }
 

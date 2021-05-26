@@ -2,7 +2,7 @@ package routes
 
 import (
 	"carsales/internal/controller"
-	"carsales/pkg/cors"
+	"carsales/middleware/cors"
 
 	"github.com/gin-gonic/gin"
 )
