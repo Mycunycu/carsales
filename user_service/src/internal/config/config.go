@@ -17,6 +17,7 @@ type Config struct {
 	RPCServer   struct {
 		Port string `yaml:"port" env-default:"8081"`
 	} `yaml:"rpcserver" env-required:"true"`
+	PgConnection string `yaml:"pg_connection" env-required:"true"`
 }
 
 var cfg *Config

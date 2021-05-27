@@ -2,6 +2,7 @@ package main
 
 import (
 	"carsalesuser/internal/config"
+	"carsalesuser/internal/store/postgres"
 	"carsalesuser/logger"
 	"log"
 )
@@ -20,7 +21,11 @@ func run() error {
 	cfg := config.Get()
 	logger.Info("Config initialized")
 
-	logger.Info(cfg.RPCServer.Port)
+	_, err := postgres.Connect(cfg)
+	if err != nil {
+		return err
+	}
+	logger.Info("Successfully connected to postgres")
 
 	return nil
 }
