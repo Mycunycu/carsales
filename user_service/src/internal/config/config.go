@@ -18,6 +18,7 @@ type Config struct {
 		Port string `yaml:"port" env-default:"8081"`
 	} `yaml:"rpcserver" env-required:"true"`
 	PgConnection string `yaml:"pg_connection" env-required:"true"`
+	PgMigration  string `yaml:"pg_migration" env-required:"true" env-default:"file://internal/store/postgres/migrations"`
 }
 
 var cfg *Config
