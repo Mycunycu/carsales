@@ -13,7 +13,7 @@ func (auth *AuthController) SignIn(ctx *fiber.Ctx) error {
 	logger := logger.Get()
 	defer logger.Sync()
 
-	logger.Info("Hey")
+	ctx.SendString("SignIn")
 	return nil
 }
 
