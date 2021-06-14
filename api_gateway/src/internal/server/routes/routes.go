@@ -2,23 +2,18 @@ package routes
 
 import (
 	"carsales/internal/controller"
-	"carsales/middleware/cors"
 
-	"github.com/gin-gonic/gin"
+	"github.com/gofiber/fiber/v2"
 )
 
-func Get() *gin.Engine {
-	r := gin.Default()
-
-	corsCfg := cors.Get()
-	r.Use(corsCfg)
+func Init(app *fiber.App) {
+	api := app.Group("/api")
+	v1 := api.Group("/v1", func(ctx *fiber.Ctx) error {
+		ctx.Set("version", "v1")
+		return ctx.Next()
+	})
 
 	authController := new(controller.AuthController)
-	auth := r.Group("api/auth")
-	{
-		auth.POST("/signUp", authController.SignUp)
-		auth.POST("/signIn", authController.SignIn)
-	}
-
-	return r
+	v1.Post("/signIn", authController.SignIn)
+	v1.Post("/signUp", authController.SignUp)
 }
