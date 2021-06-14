@@ -1,28 +1,22 @@
 package httpserver
 
 import (
-	"carsales/logger"
-	"net/http"
-	"time"
+	"carsales/internal/server/routes"
+	"fmt"
 
-	"go.uber.org/zap"
+	"github.com/gofiber/fiber/v2"
 )
 
 // Run - ...
-func Run(port string, handler http.Handler) {
-	logger := logger.Get()
-	defer logger.Sync()
-	httpServer := &http.Server{
-		Addr:           ":" + port,
-		Handler:        handler,
-		MaxHeaderBytes: 1 << 20, //1Mb
-		ReadTimeout:    10 * time.Second,
-		WriteTimeout:   10 * time.Second,
+func Run(domain string, port string) error {
+	app := fiber.New()
+	app.Server().MaxConnsPerIP = 1
+
+	routes.Init(app)
+
+	if err := app.Listen(fmt.Sprintf("%s:%s", domain, port)); err != nil {
+		return err
 	}
 
-	logger.Info("Server is running", zap.String("Port", port))
-	err := httpServer.ListenAndServe()
-	if err != nil {
-		logger.Fatal("Serve Error", zap.NamedError("Error", err))
-	}
+	return nil
 }
