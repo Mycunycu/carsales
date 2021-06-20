@@ -13,7 +13,7 @@ func Init(app *fiber.App) {
 		return ctx.Next()
 	})
 
-	authController := new(controller.AuthController)
+	authController := controller.NewAuthController()
 	v1.Post("/signIn", authController.SignIn)
 	v1.Post("/signUp", authController.SignUp)
 }

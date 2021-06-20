@@ -8,6 +8,10 @@ import (
 
 type AuthController struct{}
 
+func NewAuthController() *AuthController {
+	return &AuthController{}
+}
+
 // SignIn - login
 func (auth *AuthController) SignIn(ctx *fiber.Ctx) error {
 	logger := logger.Get()
