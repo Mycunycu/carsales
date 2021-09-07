@@ -15,11 +15,11 @@ func main() {
 }
 
 func run() error {
-	logger := logger.Get()
+	logger := logger.New()
 	defer logger.Sync()
 	logger.Info("Logger initialized")
 
-	cfg := config.Get()
+	cfg := config.New()
 	logger.Info("Config initialized")
 
 	logger.Info(fmt.Sprintf("HTTP Server starting on %s:%s", cfg.HTTPServer.Domain, cfg.HTTPServer.Port))

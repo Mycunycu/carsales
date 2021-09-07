@@ -29,7 +29,7 @@ type Config struct {
 
 var cfg *Config
 
-func Get() *Config {
+func New() *Config {
 	return cfg
 }
 
@@ -37,7 +37,7 @@ func init() {
 	var once sync.Once
 
 	once.Do(func() {
-		logger := logger.Get()
+		logger := logger.New()
 		defer logger.Sync()
 
 		logger.Info("Read application config")

@@ -14,7 +14,7 @@ func NewAuthController() *AuthController {
 
 // SignIn - login
 func (auth *AuthController) SignIn(ctx *fiber.Ctx) error {
-	logger := logger.Get()
+	logger := logger.New()
 	defer logger.Sync()
 
 	ctx.SendString("SignIn")

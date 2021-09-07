@@ -12,6 +12,10 @@ import (
 
 var logger *zap.Logger
 
+func New() *zap.Logger {
+	return logger
+}
+
 func init() {
 	path := createDirectory()
 	writer := getWriter(path)
@@ -63,8 +67,4 @@ func getEncoder() zapcore.Encoder {
 	cfg.EncodeLevel = zapcore.CapitalLevelEncoder
 
 	return zapcore.NewConsoleEncoder(cfg)
-}
-
-func Get() *zap.Logger {
-	return logger
 }
