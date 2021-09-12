@@ -28,7 +28,7 @@ func createDirectory() string {
 
 	path, err := os.Getwd()
 	if err != nil {
-		log.Fatal("logger | createDirectory | Getwd | err: ", err)
+		log.Fatal("init logger | createDirectory | Getwd | err: ", err)
 	}
 
 	_, err = os.Stat(fmt.Sprintf("%s/logs", path))
@@ -37,7 +37,7 @@ func createDirectory() string {
 	}
 
 	if err != nil {
-		log.Fatal("logger | createDirectory | Mkdir | err: ", err)
+		log.Fatal("init logger | createDirectory | Mkdir | err: ", err)
 	}
 
 	return path
@@ -48,7 +48,7 @@ func getWriter(path string) zapcore.WriteSyncer {
 
 	file, err := os.OpenFile(path, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
-		log.Fatal("logger | getWriter | OpenFile | err: ", err)
+		log.Fatal("init logger | getWriter | OpenFile | err: ", err)
 	}
 
 	return zapcore.AddSync(file)
