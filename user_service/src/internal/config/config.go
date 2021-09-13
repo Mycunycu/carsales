@@ -34,7 +34,7 @@ func init() {
 		logger := logger.Get()
 		defer logger.Sync()
 
-		logger.Info("Read application config")
+		logger.Info("read application config")
 
 		cfg = &Config{}
 

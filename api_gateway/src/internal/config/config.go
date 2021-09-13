@@ -40,7 +40,7 @@ func init() {
 		logger := logger.New()
 		defer logger.Sync()
 
-		logger.Info("Read application config")
+		logger.Info("read application config")
 
 		cfg = &Config{}
 

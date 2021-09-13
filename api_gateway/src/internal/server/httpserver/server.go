@@ -7,16 +7,24 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-// Run - ...
-func Run(domain string, port string) error {
+type HttpServer struct {
+	*fiber.App
+}
+
+func New() *HttpServer {
 	app := fiber.New()
 	app.Server().MaxConnsPerIP = 1
 
 	routes.Init(app)
 
-	if err := app.Listen(fmt.Sprintf("%s:%s", domain, port)); err != nil {
-		return err
-	}
+	return &HttpServer{app}
+}
 
-	return nil
+// Run - ...
+func (s *HttpServer) Run(domain string, port string) error {
+	return s.Listen(fmt.Sprintf("%s:%s", domain, port))
+}
+
+func (s *HttpServer) Stop() error {
+	return s.Shutdown()
 }

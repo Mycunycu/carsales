@@ -8,9 +8,9 @@ import (
 
 func Init(app *fiber.App) {
 	api := app.Group("/api")
-	v1 := api.Group("/v1", func(ctx *fiber.Ctx) error {
-		ctx.Set("version", "v1")
-		return ctx.Next()
+	v1 := api.Group("/v1", func(c *fiber.Ctx) error {
+		c.Set("version", "v1")
+		return c.Next()
 	})
 
 	authController := controller.NewAuthController()

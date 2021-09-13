@@ -13,15 +13,15 @@ func NewAuthController() *AuthController {
 }
 
 // SignIn - login
-func (auth *AuthController) SignIn(ctx *fiber.Ctx) error {
+func (auth *AuthController) SignIn(c *fiber.Ctx) error {
 	logger := logger.New()
 	defer logger.Sync()
 
-	ctx.SendString("SignIn")
+	c.SendString("SignIn")
 	return nil
 }
 
 // SignUp - register
-func (auth *AuthController) SignUp(ctx *fiber.Ctx) error {
+func (auth *AuthController) SignUp(c *fiber.Ctx) error {
 	return nil
 }
