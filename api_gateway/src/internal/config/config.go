@@ -28,7 +28,7 @@ type Config struct {
 	}
 	UserService struct {
 		Port string `yaml:"port" env-required:"true"`
-	} `yaml:"user_service" env-required:"true"`
+	} `yaml:"userservice" env-required:"true"`
 }
 
 var cfg *Config

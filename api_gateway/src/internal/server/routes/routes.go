@@ -10,6 +10,7 @@ func Init(app *fiber.App) {
 	api := app.Group("/api")
 	v1 := api.Group("/v1", func(c *fiber.Ctx) error {
 		c.Set("version", "v1")
+
 		return c.Next()
 	})
 
