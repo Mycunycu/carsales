@@ -2,7 +2,6 @@ package logger
 
 import (
 	"fmt"
-	"log"
 	"os"
 	"time"
 
@@ -16,23 +15,32 @@ func New() *zap.Logger {
 	return logger
 }
 
-func init() {
-	path := createDirectory()
-	writer := getWriter(path)
-	encoder := getEncoder()
+func Init() error {
+	path, err := createDirectory()
+	if err != nil {
+		return fmt.Errorf("createDirectory %w", err)
+	}
 
+	writer, err := getWriter(path)
+	if err != nil {
+		return fmt.Errorf("getWriter %w", err)
+	}
+
+	encoder := getEncoder()
 	core := zapcore.NewCore(encoder, writer, zapcore.DebugLevel)
 	logger = zap.New(core, zap.AddCaller())
 
 	zap.ReplaceGlobals(logger)
+
+	return nil
 }
 
-func createDirectory() string {
+func createDirectory() (string, error) {
 	var err error
 
 	path, err := os.Getwd()
 	if err != nil {
-		log.Fatal("init logger | createDirectory | Getwd | err: ", err)
+		return "", fmt.Errorf("getwd %w", err)
 	}
 
 	_, err = os.Stat(fmt.Sprintf("%s/logs", path))
@@ -41,21 +49,21 @@ func createDirectory() string {
 	}
 
 	if err != nil {
-		log.Fatal("init logger | createDirectory | Mkdir | err: ", err)
+		return "", fmt.Errorf("mkdir %w", err)
 	}
 
-	return path
+	return path, nil
 }
 
-func getWriter(path string) zapcore.WriteSyncer {
+func getWriter(path string) (zapcore.WriteSyncer, error) {
 	path = path + "/logs/all.log"
 
 	file, err := os.OpenFile(path, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
-		log.Fatal("init logger | getWriter | OpenFile | err: ", err)
+		return nil, fmt.Errorf("openFile %w", err)
 	}
 
-	return zapcore.AddSync(file)
+	return zapcore.AddSync(file), nil
 }
 
 func getEncoder() zapcore.Encoder {

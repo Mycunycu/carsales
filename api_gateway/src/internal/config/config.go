@@ -2,14 +2,18 @@ package config
 
 import (
 	"carsales/logger"
+	"fmt"
 	"sync"
 
 	"github.com/ilyakaznacheev/cleanenv"
 )
 
+type Environment string
+
 const (
-	DEVELOPMENT = "development"
-	PRODUCTION  = "production"
+	Dev  Environment = "development"
+	Stag Environment = "staging"
+	Prod Environment = "production"
 )
 
 type Config struct {
@@ -33,8 +37,9 @@ func New() *Config {
 	return cfg
 }
 
-func init() {
+func Init() error {
 	var once sync.Once
+	var err error
 
 	once.Do(func() {
 		logger := logger.New()
@@ -44,10 +49,12 @@ func init() {
 
 		cfg = &Config{}
 
-		if err := cleanenv.ReadConfig("config.yml", cfg); err != nil {
+		if err = cleanenv.ReadConfig("config.yml", cfg); err != nil {
 			help, _ := cleanenv.GetDescription(cfg, nil)
 			logger.Info(help)
-			logger.Fatal(err.Error())
+			err = fmt.Errorf("cleanenv.ReadConfig %w", err)
 		}
 	})
+
+	return err
 }

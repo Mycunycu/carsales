@@ -15,14 +15,26 @@ import (
 
 func main() {
 	if err := run(); err != nil {
-		log.Fatal("error in initialize application: ", err.Error())
+		log.Fatal("error in initialize application: ", err)
 	}
 }
 
 func run() error {
+	var err error
+
+	err = logger.Init()
+	if err != nil {
+		return fmt.Errorf("logger.Init %w", err)
+	}
+
 	logger := logger.New()
 	defer logger.Sync()
 	logger.Info("logger initialized")
+
+	err = config.Init()
+	if err != nil {
+		return fmt.Errorf("config.Init %w", err)
+	}
 
 	cfg := config.New()
 	logger.Info("config initialized")
@@ -30,7 +42,7 @@ func run() error {
 	server := httpserver.New()
 
 	go func() {
-		err := server.Run(cfg.HTTPServer.Domain, cfg.HTTPServer.Port)
+		err := server.Listen(fmt.Sprintf("%s:%s", cfg.HTTPServer.Domain, cfg.HTTPServer.Port))
 		if err != nil {
 			logger.Error("error while running http server", zap.String("err", err.Error()))
 		}
@@ -42,9 +54,9 @@ func run() error {
 	signal.Notify(exit, syscall.SIGTERM, syscall.SIGINT)
 	<-exit
 
-	if err := server.Stop(); err != nil {
+	if err = server.Shutdown(); err != nil {
 		logger.Error("failed stopping server", zap.String("err", err.Error()))
 	}
 
-	return nil
+	return err
 }

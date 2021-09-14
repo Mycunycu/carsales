@@ -2,7 +2,6 @@ package httpserver
 
 import (
 	"carsales/internal/server/routes"
-	"fmt"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -18,13 +17,4 @@ func New() *HttpServer {
 	routes.Init(app)
 
 	return &HttpServer{app}
-}
-
-// Run - ...
-func (s *HttpServer) Run(domain string, port string) error {
-	return s.Listen(fmt.Sprintf("%s:%s", domain, port))
-}
-
-func (s *HttpServer) Stop() error {
-	return s.Shutdown()
 }
