@@ -11,7 +11,7 @@ import (
 
 var logger *zap.Logger
 
-func New() *zap.Logger {
+func GetLogger() *zap.Logger {
 	return logger
 }
 

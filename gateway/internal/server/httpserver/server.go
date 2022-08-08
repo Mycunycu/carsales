@@ -1,7 +1,7 @@
 package httpserver
 
 import (
-	"carsales/internal/server/routes"
+	"github.com/Mycunycu/carsales/gateway/internal/server/routes"
 
 	"github.com/gofiber/fiber/v2"
 )

@@ -1,3 +1,0 @@
-package cors
-
-// TO DO...

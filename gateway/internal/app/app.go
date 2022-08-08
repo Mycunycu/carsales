@@ -1,25 +1,18 @@
-package main
+package app
 
 import (
-	"carsales/internal/config"
-	"carsales/internal/server/httpserver"
-	"carsales/logger"
 	"fmt"
-	"log"
 	"os"
 	"os/signal"
 	"syscall"
 
+	"github.com/Mycunycu/carsales/gateway/internal/config"
+	"github.com/Mycunycu/carsales/gateway/internal/server/httpserver"
+	"github.com/Mycunycu/carsales/gateway/pkg/logger"
 	"go.uber.org/zap"
 )
 
-func main() {
-	if err := run(); err != nil {
-		log.Fatal("error in initialize application: ", err)
-	}
-}
-
-func run() error {
+func Run() error {
 	var err error
 
 	err = logger.Init()
@@ -27,7 +20,7 @@ func run() error {
 		return fmt.Errorf("logger.Init %w", err)
 	}
 
-	logger := logger.New()
+	logger := logger.GetLogger()
 	defer logger.Sync()
 	logger.Info("logger initialized")
 
@@ -36,7 +29,7 @@ func run() error {
 		return fmt.Errorf("config.Init %w", err)
 	}
 
-	cfg := config.New()
+	cfg := config.GetConfig()
 	logger.Info("config initialized")
 
 	server := httpserver.New()

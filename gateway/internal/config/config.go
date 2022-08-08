@@ -1,9 +1,10 @@
 package config
 
 import (
-	"carsales/logger"
 	"fmt"
 	"sync"
+
+	"github.com/Mycunycu/carsales/gateway/pkg/logger"
 
 	"github.com/ilyakaznacheev/cleanenv"
 )
@@ -33,7 +34,7 @@ type Config struct {
 
 var cfg *Config
 
-func New() *Config {
+func GetConfig() *Config {
 	return cfg
 }
 
@@ -42,13 +43,12 @@ func Init() error {
 	var err error
 
 	once.Do(func() {
-		logger := logger.New()
+		logger := logger.GetLogger()
 		defer logger.Sync()
-
-		logger.Info("read application config")
 
 		cfg = &Config{}
 
+		logger.Info("read application config")
 		if err = cleanenv.ReadConfig("config.yml", cfg); err != nil {
 			help, _ := cleanenv.GetDescription(cfg, nil)
 			logger.Info(help)

@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"carsales/internal/controller"
+	"github.com/Mycunycu/carsales/gateway/internal/controller"
 
 	"github.com/gofiber/fiber/v2"
 )

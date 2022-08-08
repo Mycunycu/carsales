@@ -1,7 +1,7 @@
 package controller
 
 import (
-	"carsales/logger"
+	"github.com/Mycunycu/carsales/gateway/pkg/logger"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -14,7 +14,7 @@ func NewAuthController() *AuthController {
 
 // SignIn - login
 func (auth *AuthController) SignIn(c *fiber.Ctx) error {
-	logger := logger.New()
+	logger := logger.GetLogger()
 	defer logger.Sync()
 
 	c.SendString("SignIn")
